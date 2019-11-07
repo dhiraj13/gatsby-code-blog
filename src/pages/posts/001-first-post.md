@@ -2,7 +2,7 @@
 title: 'First Post - Introduction'
 date: 2018-12-01 07:00:00
 author: 'John Doe'
-image: ../../images/javascript.jpg
+image: ../../images/javascript.jpeg
 tags:
 - code
 ---

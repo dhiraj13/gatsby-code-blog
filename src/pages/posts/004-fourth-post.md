@@ -2,7 +2,7 @@
 title: 'Fourth Post - NODE'
 date: 2018-12-04 07:00:00
 author: 'Jane Doe'
-image: ../../images/node.jpeg
+image: ../../images/javascript.jpeg
 tags:
 - tutorial
 ---
