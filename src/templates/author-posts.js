@@ -2,15 +2,18 @@ import React from 'react'
 import Layout from '../components/layout'
 import Post from '../components/Post'
 import { graphql } from 'gatsby'
-import PaginationLinks from '../components/PaginationLinks'
+import authors from '../util/authors'
 
-const postList = (props) => {
-    const posts = props.data.allMarkdownRemark.edges
-    const { currentPage, numberOfPages } = props.pageContext
+const authorPosts = ({ data, pageContext }) => {
+    const { totalCount } = data.allMarkdownRemark
+    const author = authors.find(x => x.name === pageContext.authorName)
+    const pageHeader = `${totalCount} Posts by: ${pageContext.authorName}`
 
     return (
-        <Layout pageTitle={`Page: ${currentPage}`}>
-            {posts.map(({ node }) => (
+        <Layout pageTitle={pageHeader}
+            postAuthor={author}
+            authorImageFluid={data.file.childImageSharp.fluid}>
+            {data.allMarkdownRemark.edges.map(({ node }) => (
                 <Post key={node.id}
                     slug={node.fields.slug}
                     title={node.frontmatter.title}
@@ -21,18 +24,17 @@ const postList = (props) => {
                     fluid={node.frontmatter.image.childImageSharp.fluid}
                 />
             ))}
-            <PaginationLinks currentPage={currentPage} numberOfPages={numberOfPages} />
         </Layout>
     )
 }
 
-export const postListQuery = graphql`
-    query postListQuery($skip: Int!, $limit: Int!) {
+export const authorQuery = graphql`
+    query($authorName: String!, $imageUrl: String!) {
         allMarkdownRemark (
             sort: { fields: [frontmatter___date], order: DESC }
-            limit: $limit
-            skip: $skip
+            filter: { frontmatter: { author: { eq: $authorName }}}
         ) {
+            totalCount
             edges {
                 node {
                     id
@@ -43,7 +45,7 @@ export const postListQuery = graphql`
                         tags
                         image {
                             childImageSharp {
-                                fluid(maxWidth: 650, maxHeight: 371) {
+                                fluid(maxWidth: 650) {
                                     ...GatsbyImageSharpFluid
                                 }
                             }
@@ -56,7 +58,14 @@ export const postListQuery = graphql`
                 }
             }
         }
+        file(relativePath: { eq: $imageUrl}) {
+            childImageSharp {
+                fluid(maxWidth: 300) {
+                    ...GatsbyImageSharpFluid
+                }
+            }
+        }
     }
 `
 
-export default postList
+export default authorPosts
