@@ -1,8 +1,8 @@
 ---
-title: 'Fourth Post - CSS'
+title: 'Fourth Post - NODE'
 date: 2018-12-04 07:00:00
 author: 'Jane Doe'
-image: ../../images/javascript.jpg
+image: ../../images/node.jpeg
 tags:
 - tutorial
 ---
